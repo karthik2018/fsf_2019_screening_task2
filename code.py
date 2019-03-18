@@ -47,12 +47,12 @@ class MyWindow(QtWidgets.QWidget):
         editMenu.triggered.connect(self.on_pushButtonWrite_clicked)
         addmenu = QtWidgets.QAction('add row', self)
         addmenu.triggered.connect(self.on_pushButtonadd_clicked)
-        plotmenu = QtWidgets.QAction('plot scatter', self)
-        plotmenu.triggered.connect(self.on_pushButtonplot_clicked)
-        plotmenu1 = QtWidgets.QAction('plot lines', self)
-        plotmenu1.triggered.connect(self.on_pushButtonplot1_clicked)
-        plotmenu2 = QtWidgets.QAction('plot scatter1', self)
-        plotmenu2.triggered.connect(self.on_pushButtonplot2_clicked)
+        #plotmenu = QtWidgets.QAction('plot scatter', self)
+        #plotmenu.triggered.connect(self.on_pushButtonplot_clicked)
+        #plotmenu1 = QtWidgets.QAction('plot lines', self)
+        #plotmenu1.triggered.connect(self.on_pushButtonplot1_clicked)
+        #plotmenu2 = QtWidgets.QAction('plot scatter1', self)
+        #plotmenu2.triggered.connect(self.on_pushButtonplot2_clicked)
         selmenu = QtWidgets.QAction('sel', self)
         selmenu.triggered.connect(self.on_pushButtonsel_clicked)
         savemenu = QtWidgets.QAction('save as png', self)
@@ -65,9 +65,9 @@ class MyWindow(QtWidgets.QWidget):
         #fileMenu.addAction(newAct)
         fileMenu.addAction(impMenu)
         fileMenu.addAction(addmenu)
-        fileMenu.addAction(plotmenu)
-        fileMenu.addAction(plotmenu1)
-        fileMenu.addAction(plotmenu2)
+        #fileMenu.addAction(plotmenu)
+        #fileMenu.addAction(plotmenu1)
+        #fileMenu.addAction(plotmenu2)
 
         fileMenu.addAction(selmenu)
         fileMenu.addAction(editMenu)
@@ -99,9 +99,17 @@ class MyWindow(QtWidgets.QWidget):
         #self.model.setMinimumHeight(1000); 
         
 
-        #self.pushButtonLoad = QtWidgets.QPushButton(self)
-        #self.pushButtonLoad.setText("Load Csv File!")
-        #self.pushButtonLoad.clicked.connect(self.on_pushButtonLoad_clicked)
+        self.pushButtonplot = QtWidgets.QPushButton(self)
+        self.pushButtonplot.setText("plot scatter")
+        self.pushButtonplot.clicked.connect(self.on_pushButtonplot_clicked)
+        
+        self.pushButtonplot1 = QtWidgets.QPushButton(self)
+        self.pushButtonplot1.setText("plot line")
+        self.pushButtonplot1.clicked.connect(self.on_pushButtonplot1_clicked)
+        
+        self.pushButtonplot2 = QtWidgets.QPushButton(self)
+        self.pushButtonplot2.setText("plot scatter line")
+        self.pushButtonplot2.clicked.connect(self.on_pushButtonplot2_clicked)
 
         #self.pushButtonWrite = QtWidgets.QPushButton(self)
         #self.pushButtonWrite.setText("Write Csv File!")
@@ -118,7 +126,9 @@ class MyWindow(QtWidgets.QWidget):
         
         #self.layoutVertical.add
         #self.layout.addWidget(self.pushButtonWrite)
-        #self.layout.addWidget(self.pushButtonadd)
+        self.layout.addWidget(self.pushButtonplot)
+        self.layout.addWidget(self.pushButtonplot1)
+        self.layout.addWidget(self.pushButtonplot2)
         self.layout.addWidget(self.menubar)
         self.layout.addWidget(self.tabs)
         self.setLayout(self.layout)
@@ -226,7 +236,7 @@ class MyWindow(QtWidgets.QWidget):
         self.tabs.addTab(tab_x,'tab'+str(self.tabnumber))
         tab_x.layout=QtWidgets.QVBoxLayout(self)
         tab_x.setLayout(tab_x.layout)
-        m = PlotCanvas(self, width=5, height=4)
+        m = PlotCanvas1(self, width=5, height=4)
         tab_x.layout.addWidget(m)
         self.tabnumber=self.tabnumber+1
         
@@ -250,7 +260,7 @@ class MyWindow(QtWidgets.QWidget):
         self.tabs.addTab(tab_x,'tab'+str(self.tabnumber))
         tab_x.layout=QtWidgets.QVBoxLayout(self)
         tab_x.setLayout(tab_x.layout)
-        m = PlotCanvas(self, width=5, height=4)
+        m = PlotCanvas2(self, width=5, height=4)
         tab_x.layout.addWidget(m)
         self.tabnumber=self.tabnumber+1
 
