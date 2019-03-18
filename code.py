@@ -149,17 +149,17 @@ class MyWindow(QtWidgets.QWidget):
         for r in range(self.model.rowCount()):
             for column in range(self.model.columnCount()):
                 r1 = self.model.item(r, column)
-                r1.setFlags(r1.flags() & Qt.ItemFlag.ItemIsEditable)
+                r1.setFlags(r1.flags() & QtCore.Qt.ItemIsEditable)
         data = []
         for r in range(self.model.rowCount()):
             data.append([])
             for column in range(self.model.columnCount()):
                 r1 = self.model.item(r, column)
                 data[r].append(float(r1.data(0)))
-        out = open('out.csv', 'w')
+        out = open(self.fileInput, 'w')
         for r2 in data:
             for co in r2:
-                out.write(co,delim=';')
+                out.write(str(co))
             out.write('\n')
         out.close()
      #   with open(fileName, "w") as fileOutput:
@@ -324,7 +324,8 @@ class PlotCanvas(FigureCanvas):
         self.data1=col1
         self.data2=col2
         self.plot()
-        
+        self.img=fig
+
  
  
     def plot(self):
@@ -333,7 +334,6 @@ class PlotCanvas(FigureCanvas):
         ax.set_title('scatter')
         ax.set_xlabel('x')
         ax.set_ylabel('y')
-        self.img=ax
         self.draw()
         
 class PlotCanvas1(FigureCanvas):
@@ -352,7 +352,8 @@ class PlotCanvas1(FigureCanvas):
         self.data1=col1
         self.data2=col2
         self.plot()
-        
+        self.img=fig
+
  
  
     def plot(self):
@@ -361,7 +362,6 @@ class PlotCanvas1(FigureCanvas):
         ax.set_title('line')
         ax.set_xlabel('x')
         ax.set_ylabel('y')
-        self.img=ax
         self.draw()
         
 class PlotCanvas2(FigureCanvas):
@@ -380,6 +380,7 @@ class PlotCanvas2(FigureCanvas):
         self.data1=col1
         self.data2=col2
         self.plot()
+        self.img=fig
         
  
  
@@ -393,7 +394,7 @@ class PlotCanvas2(FigureCanvas):
         ax.set_title('scatter line')
         ax.set_xlabel('x')
         ax.set_ylabel('y')
-        self.img=ax
+        
         self.draw()
 
 if __name__ == "__main__":
