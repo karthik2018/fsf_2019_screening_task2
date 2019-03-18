@@ -9,7 +9,6 @@ from scipy.interpolate import interp1d,UnivariateSpline
 
 from matplotlib.lines import Line2D      
 
-img=plt
 tra=0
 from PyQt5 import QtCore, QtGui, QtWidgets,Qt
 
@@ -22,22 +21,14 @@ class MyWindow(QtWidgets.QWidget):
         
         self.setGeometry(0,0,300,200)
         self.layout = QtWidgets.QVBoxLayout()
-
-
         self.model = QtWidgets.QTableWidget(self)
         self.fileName=""
         self.leng=0
         self.row=0
         self.col=0
         self.tabnumber=2
-        
+        self.head=[]
 
-        #self.tableView = QtWidgets.QTableView(self)
-        
-        
-        #self.tableView.setModel(self.model)
-        #self.tableView.horizontalHeader().setStretchLastSection(True)
-        
         self.menubar = QtWidgets.QMenuBar()
         fileMenu = self.menubar.addMenu('File')
         
@@ -47,58 +38,24 @@ class MyWindow(QtWidgets.QWidget):
         editMenu.triggered.connect(self.on_pushButtonWrite_clicked)
         addmenu = QtWidgets.QAction('add row', self)
         addmenu.triggered.connect(self.on_pushButtonadd_clicked)
-        #plotmenu = QtWidgets.QAction('plot scatter', self)
-        #plotmenu.triggered.connect(self.on_pushButtonplot_clicked)
-        #plotmenu1 = QtWidgets.QAction('plot lines', self)
-        #plotmenu1.triggered.connect(self.on_pushButtonplot1_clicked)
-        #plotmenu2 = QtWidgets.QAction('plot scatter1', self)
-        #plotmenu2.triggered.connect(self.on_pushButtonplot2_clicked)
         selmenu = QtWidgets.QAction('sel', self)
         selmenu.triggered.connect(self.on_pushButtonsel_clicked)
         savemenu = QtWidgets.QAction('save as png', self)
         savemenu.triggered.connect(self.on_pushButtonsave_clicked)
-        #impAct = QAction('Import mail', self) 
-        #impMenu.addAction(impAct)
-        
-        #newAct = QAction('New', self)        
-        
-        #fileMenu.addAction(newAct)
+
         fileMenu.addAction(impMenu)
         fileMenu.addAction(addmenu)
-        #fileMenu.addAction(plotmenu)
-        #fileMenu.addAction(plotmenu1)
-        #fileMenu.addAction(plotmenu2)
-
         fileMenu.addAction(selmenu)
         fileMenu.addAction(editMenu)
         fileMenu.addAction(savemenu)
 
-        
         self.tabs = QtWidgets.QTabWidget(self)
         tab_bar = QtWidgets.QTabBar(self.tabs)
         self.tab_1=QtWidgets.QWidget()
-        
-
-        
-        
-        #self.tab_1=tab_bar.addTab("Main")
-        #self.tab_2 = tab_bar.addTab("Description")
         self.tabs.addTab(self.tab_1,"tab1")
-
         self.tab_1.layout=QtWidgets.QVBoxLayout(self)
         self.tab_1.setLayout(self.tab_1.layout)
-        
-        
-                
-
-        
-        
-        #self.model.setMaximumWidth(1000);
-        #self.model.setMinimumWidth(1000);
-        #self.model.setMaximumHeight(1000);
-        #self.model.setMinimumHeight(1000); 
-        
-
+         
         self.pushButtonplot = QtWidgets.QPushButton(self)
         self.pushButtonplot.setText("plot scatter")
         self.pushButtonplot.clicked.connect(self.on_pushButtonplot_clicked)
@@ -111,33 +68,16 @@ class MyWindow(QtWidgets.QWidget):
         self.pushButtonplot2.setText("plot scatter line")
         self.pushButtonplot2.clicked.connect(self.on_pushButtonplot2_clicked)
 
-        #self.pushButtonWrite = QtWidgets.QPushButton(self)
-        #self.pushButtonWrite.setText("Write Csv File!")
-        #self.pushButtonWrite.clicked.connect(self.on_pushButtonWrite_clicked)
-        
-        #self.pushButtonadd = QtWidgets.QPushButton(self)
-        #self.pushButtonadd.setText("add data!")
-        #self.pushButtonadd.clicked.connect(self.on_pushButtonadd_clicked)
-        
-        #self.pushButtonplot = QtWidgets.QPushButton(self)
-        #self.pushButtonplot.setText("plot selected data!")
-        #self.pushButtonplot.clicked.connect(self.on_pushButtonplot_clicked)
-
-        
-        #self.layoutVertical.add
-        #self.layout.addWidget(self.pushButtonWrite)
         self.layout.addWidget(self.pushButtonplot)
         self.layout.addWidget(self.pushButtonplot1)
         self.layout.addWidget(self.pushButtonplot2)
         self.layout.addWidget(self.menubar)
         self.layout.addWidget(self.tabs)
         self.setLayout(self.layout)
-        #self.layoutVertical.addWidget(self.pushButtonplot)
-
-
 
     def loadCsv(self, fileName):
-        fileInput=pd.read_csv(fileName)
+        fileInput=pd.read_csv(fileName,sep=',')
+        self.head=list(fileInput.keys())
         self.model.setHorizontalHeaderLabels(list(fileInput.keys()))
         for i in range(len(fileInput)):
             self.row=len(fileInput)
@@ -150,10 +90,6 @@ class MyWindow(QtWidgets.QWidget):
         self.model.move(0,0)
         self.tab_1.layout.addWidget(self.model)
         
-                
-                
-    
-
     def writeCsv(self, fileName):
         for r in range(self.model.rowCount()):
             for column in range(self.model.columnCount()):
@@ -164,33 +100,16 @@ class MyWindow(QtWidgets.QWidget):
             data.append([])
             for column in range(self.model.columnCount()):
                 r1 = self.model.item(r, column)
-                data[r].append(float(r1.data(0)))
-        out = open(self.fileInput, 'w')
-        for r2 in data:
-            for co in r2:
-                out.write(str(co))
-            out.write('\n')
+                data[r].append(str(r1.data(0)))
+        out = open(fileName, 'w')
+        abc=csv.writer(out,delimiter=',')
+        abc.writerow(self.head)
+        abc.writerows(data)
         out.close()
-     #   with open(fileName, "w") as fileOutput:
-      #      writer = csv.writer(fileOutput)
-       #     for rowNumber in range(self.model.rowCount()):
-        #        fields = [
-         #           self.model.data(
-          #              self.model.index(rowNumber, columnNumber),
-           #             QtCore.Qt.DisplayRole
-            #        )
-             #       for columnNumber in range(self.model.columnCount())
-              #  ]
-               # writer.writerow(fields)
                 
     def adddata(self,fileName):
-        #it=[]
         self.row=self.row+1
-        self.model.setRowCount(self.row)
-        #for i in range(self.leng):
-        #    it.append(QtWidgets.QTableWidgetItem(0))
-        #self.model.insertRow(it)
-        
+        self.model.setRowCount(self.row)       
         
     def plotdata(self,fileName):
         tra=0
@@ -201,13 +120,6 @@ class MyWindow(QtWidgets.QWidget):
             else:
                 col2.append(float(i.data(0)))
             t=t+1
-        
-        #fig = Figure(figsize=(5, 4), dpi=100)
-        #self.axes = fig.add_subplot(111)
-        #ax = FigureCanvas.figure.add_subplot(111)
-        #ax.scatter(data1,data2)
-        #ax.set_title('PyQt Matplotlib Example')
-        #self.draw()
         tab_x=QtWidgets.QWidget()
         self.tabs.addTab(tab_x,'tab'+str(self.tabnumber))
         tab_x.layout=QtWidgets.QVBoxLayout(self)
@@ -225,13 +137,6 @@ class MyWindow(QtWidgets.QWidget):
             else:
                 col2.append(float(i.data(0)))
             t=t+1
-       
-        #fig = Figure(figsize=(5, 4), dpi=100)
-        #self.axes = fig.add_subplot(111)
-        #ax = FigureCanvas.figure.add_subplot(111)
-        #ax.scatter(data1,data2)
-        #ax.set_title('PyQt Matplotlib Example')
-        #self.draw()
         tab_x=QtWidgets.QWidget()
         self.tabs.addTab(tab_x,'tab'+str(self.tabnumber))
         tab_x.layout=QtWidgets.QVBoxLayout(self)
@@ -249,13 +154,6 @@ class MyWindow(QtWidgets.QWidget):
             else:
                 col2.append(float(i.data(0)))
             t=t+1
-        
-        #fig = Figure(figsize=(5, 4), dpi=100)
-        #self.axes = fig.add_subplot(111)
-        #ax = FigureCanvas.figure.add_subplot(111)
-        #ax.scatter(data1,data2)
-        #ax.set_title('PyQt Matplotlib Example')
-        #self.draw()
         tab_x=QtWidgets.QWidget()
         self.tabs.addTab(tab_x,'tab'+str(self.tabnumber))
         tab_x.layout=QtWidgets.QVBoxLayout(self)
@@ -263,11 +161,7 @@ class MyWindow(QtWidgets.QWidget):
         m = PlotCanvas2(self, width=5, height=4)
         tab_x.layout.addWidget(m)
         self.tabnumber=self.tabnumber+1
-
-
-        
-                
-        
+   
     def seldata(self,fileName):
         rows=[]
         t=self.row
@@ -288,9 +182,6 @@ class MyWindow(QtWidgets.QWidget):
         if tra==21:
             PlotCanvas21(self, width=5, height=4)
 
-            
-        
-
     @QtCore.pyqtSlot()
     def on_pushButtonWrite_clicked(self):
         self.writeCsv(self.fileName)
@@ -302,7 +193,6 @@ class MyWindow(QtWidgets.QWidget):
         self.loadCsv(self.fileName)
         self.layout.addWidget(self.model)
     
-        
     @QtCore.pyqtSlot()
     def on_pushButtonadd_clicked(self):
         self.adddata(self.fileName)
@@ -331,23 +221,15 @@ class PlotCanvas(FigureCanvas):
  
     def __init__(self, parent=None, width=5, height=4, dpi=100):
         fig = Figure(figsize=(width, height), dpi=dpi)
-        
         self.axes = fig.add_subplot(111)
- 
         FigureCanvas.__init__(self, fig)
         self.setParent(parent)
- 
-        #FigureCanvas.setSizePolicy(self,
-        #        QSizePolicy.Expanding,
-        #        QSizePolicy.Expanding)
         FigureCanvas.updateGeometry(self)
         self.data1=col1
         self.data2=col2
         self.plot()
         img=fig
 
- 
- 
     def plot(self):
         ax = self.figure.add_subplot(111)
         ax.scatter(self.data1,self.data2)
@@ -359,24 +241,16 @@ class PlotCanvas(FigureCanvas):
 class PlotCanvas01(FigureCanvas):
  
     def __init__(self, parent=None, width=5, height=4, dpi=100):
-        fig = Figure(figsize=(width, height), dpi=dpi)
-        
+        fig = Figure(figsize=(width, height), dpi=dpi)  
         self.axes = fig.add_subplot(111)
- 
         FigureCanvas.__init__(self, fig)
         self.setParent(parent)
- 
-        #FigureCanvas.setSizePolicy(self,
-        #        QSizePolicy.Expanding,
-        #        QSizePolicy.Expanding)
         FigureCanvas.updateGeometry(self)
         self.data1=col1
         self.data2=col2
         self.plot()
         fig.savefig('123.png')
 
- 
- 
     def plot(self):
         ax = self.figure.add_subplot(111)
         ax.scatter(self.data1,self.data2)
@@ -390,21 +264,14 @@ class PlotCanvas1(FigureCanvas):
     def __init__(self, parent=None, width=5, height=4, dpi=100):
         fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = fig.add_subplot(111)
- 
         FigureCanvas.__init__(self, fig)
         self.setParent(parent)
- 
-        #FigureCanvas.setSizePolicy(self,
-        #        QSizePolicy.Expanding,
-        #        QSizePolicy.Expanding)
         FigureCanvas.updateGeometry(self)
         self.data1=col1
         self.data2=col2
         self.plot()
         img=fig
 
- 
- 
     def plot(self):
         ax = self.figure.add_subplot(111)
         ax.plot(self.data1,self.data2)
@@ -418,21 +285,14 @@ class PlotCanvas11(FigureCanvas):
     def __init__(self, parent=None, width=5, height=4, dpi=100):
         fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = fig.add_subplot(111)
- 
         FigureCanvas.__init__(self, fig)
         self.setParent(parent)
- 
-        #FigureCanvas.setSizePolicy(self,
-        #        QSizePolicy.Expanding,
-        #        QSizePolicy.Expanding)
         FigureCanvas.updateGeometry(self)
         self.data1=col1
         self.data2=col2
         self.plot()
         fig.savefig('123.png')
-
- 
- 
+        
     def plot(self):
         ax = self.figure.add_subplot(111)
         ax.plot(self.data1,self.data2)
@@ -446,21 +306,14 @@ class PlotCanvas2(FigureCanvas):
     def __init__(self, parent=None, width=5, height=4, dpi=100):
         fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = fig.add_subplot(111)
- 
         FigureCanvas.__init__(self, fig)
         self.setParent(parent)
- 
-        #FigureCanvas.setSizePolicy(self,
-        #        QSizePolicy.Expanding,
-        #        QSizePolicy.Expanding)
         FigureCanvas.updateGeometry(self)
         self.data1=col1
         self.data2=col2
         self.plot()
         img=fig
         
- 
- 
     def plot(self):
         ax = self.figure.add_subplot(111)
         c=sorted(self.data1)
@@ -471,28 +324,21 @@ class PlotCanvas2(FigureCanvas):
         ax.set_title('scatter line')
         ax.set_xlabel('x')
         ax.set_ylabel('y')
-        
         self.draw()
+        
 class PlotCanvas21(FigureCanvas):
  
     def __init__(self, parent=None, width=5, height=4, dpi=100):
         fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = fig.add_subplot(111)
- 
         FigureCanvas.__init__(self, fig)
         self.setParent(parent)
- 
-        #FigureCanvas.setSizePolicy(self,
-        #        QSizePolicy.Expanding,
-        #        QSizePolicy.Expanding)
         FigureCanvas.updateGeometry(self)
         self.data1=col1
         self.data2=col2
         self.plot()
         fig.savefig('123.png')
         
- 
- 
     def plot(self):
         ax = self.figure.add_subplot(111)
         c=sorted(self.data1)
@@ -503,7 +349,6 @@ class PlotCanvas21(FigureCanvas):
         ax.set_title('scatter line')
         ax.set_xlabel('x')
         ax.set_ylabel('y')
-        
         self.draw()
 
 if __name__ == "__main__":
@@ -512,8 +357,6 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     app.setApplicationName('MyWindow')
     
-    
-
     main = MyWindow()
     main.show()
 
