@@ -9,8 +9,8 @@ from scipy.interpolate import interp1d,UnivariateSpline
 
 from matplotlib.lines import Line2D      
 
-
-
+img=plt
+tra=0
 from PyQt5 import QtCore, QtGui, QtWidgets,Qt
 
 col1=[]
@@ -30,7 +30,6 @@ class MyWindow(QtWidgets.QWidget):
         self.row=0
         self.col=0
         self.tabnumber=2
-        self.img=plt
         
 
         #self.tableView = QtWidgets.QTableView(self)
@@ -184,6 +183,7 @@ class MyWindow(QtWidgets.QWidget):
         
         
     def plotdata(self,fileName):
+        tra=0
         t=0
         for i in self.model.selectedItems():
             if t%2==0:
@@ -207,6 +207,7 @@ class MyWindow(QtWidgets.QWidget):
         self.tabnumber=self.tabnumber+1
         
     def plotdata1(self,fileName):
+        tra=1
         t=0
         for i in self.model.selectedItems():
             if t%2==0:
@@ -230,6 +231,7 @@ class MyWindow(QtWidgets.QWidget):
         self.tabnumber=self.tabnumber+1
         
     def plotdata2(self,fileName):
+        tra=2
         t=0
         for i in self.model.selectedItems():
             if t%2==0:
@@ -269,7 +271,14 @@ class MyWindow(QtWidgets.QWidget):
                 rows[j].append(float(i.data(0)))
          
     def savedata(self,fileName):
-        self.img.savefig('abc.png')
+        if tra==0:
+            PlotCanvas01(self, width=5, height=4)
+        if tra==1:
+            PlotCanvas11(self, width=5, height=4)
+        if tra==21:
+            PlotCanvas21(self, width=5, height=4)
+
+            
         
 
     @QtCore.pyqtSlot()
@@ -312,6 +321,7 @@ class PlotCanvas(FigureCanvas):
  
     def __init__(self, parent=None, width=5, height=4, dpi=100):
         fig = Figure(figsize=(width, height), dpi=dpi)
+        
         self.axes = fig.add_subplot(111)
  
         FigureCanvas.__init__(self, fig)
@@ -324,7 +334,36 @@ class PlotCanvas(FigureCanvas):
         self.data1=col1
         self.data2=col2
         self.plot()
-        self.img=fig
+        img=fig
+
+ 
+ 
+    def plot(self):
+        ax = self.figure.add_subplot(111)
+        ax.scatter(self.data1,self.data2)
+        ax.set_title('scatter')
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+        self.draw()
+        
+class PlotCanvas01(FigureCanvas):
+ 
+    def __init__(self, parent=None, width=5, height=4, dpi=100):
+        fig = Figure(figsize=(width, height), dpi=dpi)
+        
+        self.axes = fig.add_subplot(111)
+ 
+        FigureCanvas.__init__(self, fig)
+        self.setParent(parent)
+ 
+        #FigureCanvas.setSizePolicy(self,
+        #        QSizePolicy.Expanding,
+        #        QSizePolicy.Expanding)
+        FigureCanvas.updateGeometry(self)
+        self.data1=col1
+        self.data2=col2
+        self.plot()
+        fig.savefig('123.png')
 
  
  
@@ -352,7 +391,35 @@ class PlotCanvas1(FigureCanvas):
         self.data1=col1
         self.data2=col2
         self.plot()
-        self.img=fig
+        img=fig
+
+ 
+ 
+    def plot(self):
+        ax = self.figure.add_subplot(111)
+        ax.plot(self.data1,self.data2)
+        ax.set_title('line')
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+        self.draw()
+        
+class PlotCanvas11(FigureCanvas):
+ 
+    def __init__(self, parent=None, width=5, height=4, dpi=100):
+        fig = Figure(figsize=(width, height), dpi=dpi)
+        self.axes = fig.add_subplot(111)
+ 
+        FigureCanvas.__init__(self, fig)
+        self.setParent(parent)
+ 
+        #FigureCanvas.setSizePolicy(self,
+        #        QSizePolicy.Expanding,
+        #        QSizePolicy.Expanding)
+        FigureCanvas.updateGeometry(self)
+        self.data1=col1
+        self.data2=col2
+        self.plot()
+        fig.savefig('123.png')
 
  
  
@@ -380,7 +447,39 @@ class PlotCanvas2(FigureCanvas):
         self.data1=col1
         self.data2=col2
         self.plot()
-        self.img=fig
+        img=fig
+        
+ 
+ 
+    def plot(self):
+        ax = self.figure.add_subplot(111)
+        c=sorted(self.data1)
+        c1=sorted(self.data2)
+        line=Line2D(c,c1)
+        ax.add_line(line)
+        ax.scatter(self.data1,self.data2)
+        ax.set_title('scatter line')
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+        
+        self.draw()
+class PlotCanvas21(FigureCanvas):
+ 
+    def __init__(self, parent=None, width=5, height=4, dpi=100):
+        fig = Figure(figsize=(width, height), dpi=dpi)
+        self.axes = fig.add_subplot(111)
+ 
+        FigureCanvas.__init__(self, fig)
+        self.setParent(parent)
+ 
+        #FigureCanvas.setSizePolicy(self,
+        #        QSizePolicy.Expanding,
+        #        QSizePolicy.Expanding)
+        FigureCanvas.updateGeometry(self)
+        self.data1=col1
+        self.data2=col2
+        self.plot()
+        fig.savefig('123.png')
         
  
  
