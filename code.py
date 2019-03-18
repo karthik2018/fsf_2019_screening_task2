@@ -328,8 +328,10 @@ class PlotCanvas(FigureCanvas):
     def plot(self):
         ax = self.figure.add_subplot(111)
         ax.scatter(self.data1,self.data2)
-        ax.set_title('title')
-        self.img=plt
+        ax.set_title('scatter')
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+        self.img=ax
         self.draw()
         
 class PlotCanvas1(FigureCanvas):
@@ -354,8 +356,10 @@ class PlotCanvas1(FigureCanvas):
     def plot(self):
         ax = self.figure.add_subplot(111)
         ax.plot(self.data1,self.data2)
-        ax.set_title('title')
-        self.img=plt
+        ax.set_title('line')
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+        self.img=ax
         self.draw()
         
 class PlotCanvas2(FigureCanvas):
@@ -384,7 +388,9 @@ class PlotCanvas2(FigureCanvas):
         line=Line2D(c,c1)
         ax.add_line(line)
         ax.scatter(self.data1,self.data2)
-        ax.set_title('title')
+        ax.set_title('scatter line')
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
         self.img=ax
         self.draw()
 
