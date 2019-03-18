@@ -11,7 +11,7 @@ from matplotlib.lines import Line2D
 
 
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets,Qt
 
 col1=[]
 col2=[]
@@ -149,7 +149,7 @@ class MyWindow(QtWidgets.QWidget):
         for r in range(self.model.rowCount()):
             for column in range(self.model.columnCount()):
                 r1 = self.model.item(r, column)
-                r1.setFlags(r1.flags() & Qt.ItemIsEditable)
+                r1.setFlags(r1.flags() & Qt.ItemFlag.ItemIsEditable)
         data = []
         for r in range(self.model.rowCount()):
             data.append([])
@@ -258,13 +258,15 @@ class MyWindow(QtWidgets.QWidget):
         
     def seldata(self,fileName):
         rows=[]
-        t=len(self.model)
+        t=self.row
         t2=len(self.model.selectedItems())
-        t3=t/t2
+        t3=int(t2/t)
         k=0
+        for i in range(t3):
+            rows.append([])
         for i in self.model.selectedItems():
-            rows.append(float(i.data(0)))
-        print(rows)
+            for j in range(t3):
+                rows[j].append(float(i.data(0)))
          
     def savedata(self,fileName):
         self.img.savefig('abc.png')
