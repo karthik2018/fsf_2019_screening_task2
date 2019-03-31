@@ -31,22 +31,24 @@ class MyWindow(QtWidgets.QWidget):
 
         self.menubar = QtWidgets.QMenuBar()
         fileMenu = self.menubar.addMenu('File')
+        fileMenu1 = self.menubar.addMenu('Edit')
+
         
-        impMenu = QtWidgets.QAction('load', self)
+        impMenu = QtWidgets.QAction('Load', self)
         impMenu.triggered.connect(self.on_pushButtonLoad_clicked)
-        editMenu = QtWidgets.QAction('edit', self)
+        editMenu = QtWidgets.QAction('Edit data', self)
         editMenu.triggered.connect(self.on_pushButtonWrite_clicked)
-        addmenu = QtWidgets.QAction('add row', self)
+        addmenu = QtWidgets.QAction('Add data', self)
         addmenu.triggered.connect(self.on_pushButtonadd_clicked)
-        selmenu = QtWidgets.QAction('sel', self)
+        selmenu = QtWidgets.QAction('Select', self)
         selmenu.triggered.connect(self.on_pushButtonsel_clicked)
-        savemenu = QtWidgets.QAction('save as png', self)
+        savemenu = QtWidgets.QAction('Save as png', self)
         savemenu.triggered.connect(self.on_pushButtonsave_clicked)
 
         fileMenu.addAction(impMenu)
         fileMenu.addAction(addmenu)
         fileMenu.addAction(selmenu)
-        fileMenu.addAction(editMenu)
+        fileMenu1.addAction(editMenu)
         fileMenu.addAction(savemenu)
 
         self.tabs = QtWidgets.QTabWidget(self)
@@ -65,7 +67,7 @@ class MyWindow(QtWidgets.QWidget):
         self.pushButtonplot1.clicked.connect(self.on_pushButtonplot1_clicked)
         
         self.pushButtonplot2 = QtWidgets.QPushButton(self)
-        self.pushButtonplot2.setText("plot scatter line")
+        self.pushButtonplot2.setText("plot scatter with line")
         self.pushButtonplot2.clicked.connect(self.on_pushButtonplot2_clicked)
 
         self.layout.addWidget(self.pushButtonplot)
